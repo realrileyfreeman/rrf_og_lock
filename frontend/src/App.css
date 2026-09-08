@@ -53,6 +53,27 @@ textarea {
   color: #0a0e12;
 }
 
+.decodeurs-dispo {
+  color: #8fa3ab;
+  font-size: 0.85em;
+}
+
+.chargement {
+  color: #7dd3fc;
+}
+
+.erreur {
+  color: #f87171;
+}
+
+.meilleur-resultat {
+  margin: 16px 0;
+  padding: 10px 14px;
+  background: #0f2a33;
+  border: 1px solid #7dd3fc;
+  border-radius: 6px;
+}
+
 .resultat ul {
   list-style: none;
   padding-left: 20px;

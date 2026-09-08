@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { decoderAuto, decoderEtape } from "./api.js";
+import { useEffect, useState } from "react";
+import { decoderAuto, decoderEtape, listerDecodeurs } from "./api.js";
 
 function Noeud({ noeud }) {
   return (
@@ -18,6 +18,13 @@ function Noeud({ noeud }) {
   );
 }
 
+function meilleureFeuille(noeud) {
+  if (!noeud.enfants || noeud.enfants.length === 0) return noeud;
+  return noeud.enfants
+    .map(meilleureFeuille)
+    .reduce((a, b) => (b.score_lisibilite > a.score_lisibilite ? b : a));
+}
+
 export default function App() {
   const [texte, setTexte] = useState("");
   const [arbre, setArbre] = useState(null);
@@ -25,24 +32,55 @@ export default function App() {
   const [etapes, setEtapes] = useState([]);
   const [texteCourant, setTexteCourant] = useState("");
   const [candidatsCourants, setCandidatsCourants] = useState([]);
+  const [decodeurs, setDecodeurs] = useState([]);
+  const [chargement, setChargement] = useState(false);
+  const [erreur, setErreur] = useState("");
+
+  useEffect(() => {
+    listerDecodeurs().then(setDecodeurs).catch(() => {});
+  }, []);
 
   async function lancerAuto() {
-    const resultat = await decoderAuto(texte);
-    setArbre(resultat);
+    setChargement(true);
+    setErreur("");
+    try {
+      const resultat = await decoderAuto(texte);
+      setArbre(resultat);
+    } catch (e) {
+      setErreur("Echec du decodage : " + e.message);
+    } finally {
+      setChargement(false);
+    }
   }
 
   async function demarrerPasAPas() {
-    setTexteCourant(texte);
-    setEtapes([]);
-    const candidats = await decoderEtape(texte);
-    setCandidatsCourants(candidats);
+    setChargement(true);
+    setErreur("");
+    try {
+      setTexteCourant(texte);
+      setEtapes([]);
+      const candidats = await decoderEtape(texte);
+      setCandidatsCourants(candidats);
+    } catch (e) {
+      setErreur("Echec du decodage : " + e.message);
+    } finally {
+      setChargement(false);
+    }
   }
 
   async function choisirCandidat(candidat) {
-    setEtapes([...etapes, candidat]);
-    setTexteCourant(candidat.texte);
-    const candidats = await decoderEtape(candidat.texte);
-    setCandidatsCourants(candidats);
+    setChargement(true);
+    setErreur("");
+    try {
+      setEtapes([...etapes, candidat]);
+      setTexteCourant(candidat.texte);
+      const candidats = await decoderEtape(candidat.texte);
+      setCandidatsCourants(candidats);
+    } catch (e) {
+      setErreur("Echec du decodage : " + e.message);
+    } finally {
+      setChargement(false);
+    }
   }
 
   function basculerModePasAPas() {
@@ -54,6 +92,9 @@ export default function App() {
   return (
     <div className="app">
       <h1>RRF OG LOCK</h1>
+      {decodeurs.length > 0 && (
+        <p className="decodeurs-dispo">Decodeurs disponibles : {decodeurs.join(", ")}</p>
+      )}
       <textarea
         value={texte}
         onChange={(e) => setTexte(e.target.value)}
@@ -66,10 +107,22 @@ export default function App() {
         </button>
       </div>
 
+      {chargement && <p className="chargement">Decodage en cours...</p>}
+      {erreur && <p className="erreur">{erreur}</p>}
+
       {!modePasAPas && arbre && (
-        <ul className="resultat">
-          <Noeud noeud={arbre} />
-        </ul>
+        <>
+          <div className="meilleur-resultat">
+            <h2>Meilleur resultat</h2>
+            <pre>{meilleureFeuille(arbre).texte}</pre>
+            <span className="score">
+              lisibilite {meilleureFeuille(arbre).score_lisibilite.toFixed(2)}
+            </span>
+          </div>
+          <ul className="resultat">
+            <Noeud noeud={arbre} />
+          </ul>
+        </>
       )}
 
       {modePasAPas && (
