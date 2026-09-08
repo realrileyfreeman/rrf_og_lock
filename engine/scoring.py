@@ -17,8 +17,10 @@ def score_lisibilite(texte):
 
     mots = re.findall(r"[a-zA-ZÀ-ÿ]+", texte.lower())
     if mots:
-        connus = sum(1 for m in mots if m in MOTS_COURANTS)
-        ratio_mots = connus / len(mots)
+        # ponderation par longueur : un stopword court qui matche par hasard
+        # ne doit pas dominer le score comme le ferait un ratio par nombre de mots
+        connus_mots = [m for m in mots if m in MOTS_COURANTS]
+        ratio_mots = sum(len(m) for m in connus_mots) / sum(len(m) for m in mots)
     else:
         ratio_mots = 0.0
 

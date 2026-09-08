@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from engine.decodeurs import TOUS
 from engine.recursive import auto_decode, detect_layer
@@ -17,7 +17,7 @@ app.add_middleware(
 
 class RequeteDecode(BaseModel):
     texte: str
-    profondeur_max: int = 10
+    profondeur_max: int = Field(default=10, le=10)
 
 
 class RequeteEtape(BaseModel):

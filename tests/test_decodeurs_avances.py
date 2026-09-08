@@ -29,3 +29,8 @@ def test_hash_identifie_md5():
 
     assert hash_dec.detecter(empreinte) > 0.0
     assert "MD5" in hash_dec.decoder(empreinte)
+
+
+def test_xor_detecter_renvoie_un_float_dans_0_1():
+    assert 0.0 <= xor_dec.detecter("le chat est content") <= 1.0
+    assert xor_dec.detecter("ab") == 0.0

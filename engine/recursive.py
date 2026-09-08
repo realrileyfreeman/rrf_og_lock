@@ -3,7 +3,7 @@ from engine.scoring import score_lisibilite
 from engine.types import Candidat
 
 SEUIL_DETECTION = 0.2
-SEUIL_LISIBLE = 0.8
+SEUIL_LISIBLE = 0.6
 MAX_BRANCHES = 3
 
 
@@ -37,16 +37,26 @@ def auto_decode(texte, profondeur_max=10):
         texte=texte,
         score_lisibilite=score_lisibilite(texte),
     )
-    _explorer(racine, profondeur_max)
+    _explorer(racine, profondeur_max, {texte})
     return racine
 
 
-def _explorer(noeud, profondeur_restante):
+def _explorer(noeud, profondeur_restante, textes_vus):
     if profondeur_restante <= 0:
         return
     if noeud.score_lisibilite >= SEUIL_LISIBLE:
         return
     candidats = detect_layer(noeud.texte)
-    noeud.enfants = candidats[:MAX_BRANCHES]
+    # ponytail: dedup par texte produit, evite l'explosion combinatoire
+    # (cycles/re-decouverte du meme texte par des branches differentes)
+    retenus = []
+    for c in candidats:
+        if c.texte in textes_vus:
+            continue
+        textes_vus.add(c.texte)
+        retenus.append(c)
+        if len(retenus) >= MAX_BRANCHES:
+            break
+    noeud.enfants = retenus
     for enfant in noeud.enfants:
-        _explorer(enfant, profondeur_restante - 1)
+        _explorer(enfant, profondeur_restante - 1, textes_vus)

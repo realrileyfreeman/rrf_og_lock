@@ -31,3 +31,12 @@ def test_auto_decode_multicouche_hex_puis_base64():
 def test_auto_decode_respecte_profondeur_max():
     arbre = auto_decode("xyz123", profondeur_max=0)
     assert arbre.enfants == []
+
+
+def _compter_noeuds(noeud):
+    return 1 + sum(_compter_noeuds(e) for e in noeud.enfants)
+
+
+def test_auto_decode_pas_d_explosion_combinatoire():
+    arbre = auto_decode("Ym9uam91cg==")
+    assert _compter_noeuds(arbre) < 500

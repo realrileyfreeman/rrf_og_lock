@@ -7,6 +7,11 @@ def test_rot13_retrouve_un_texte_connu():
     assert resultat.lower() == "le chat"
 
 
+def test_rot_detecter_renvoie_un_float_dans_0_1():
+    assert 0.0 <= rot_dec.detecter("yr pung") <= 1.0
+    assert rot_dec.detecter("1234") == 0.0
+
+
 def test_binaire_round_trip():
     original = "hi"
     encode = " ".join(format(b, "08b") for b in original.encode())
