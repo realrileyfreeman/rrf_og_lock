@@ -12,6 +12,13 @@ Le nom du projet référence Boondocks (choix esthétique pour le front).
 la décoder, puis répéter récursivement sur le résultat jusqu'à obtenir du texte clair
 (ou une limite de profondeur), sans que l'utilisateur ait à préciser les couches à l'avance.
 
+## Contraintes
+
+- Interface utilisateur (front) entièrement en français.
+- Code et commentaires écrits comme par un étudiant en master, pas de style IA
+  (pas de docstrings verbeuses, commentaires rares et utiles uniquement).
+- Pas d'attribution IA dans l'historique git.
+
 ## Non-objectifs
 
 - Pas de cassage de chiffrement fort (AES avec clé inconnue, etc.) — hors scope.
