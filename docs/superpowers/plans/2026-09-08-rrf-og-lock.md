@@ -930,7 +930,7 @@ from engine.decodeurs import TOUS
 from engine.scoring import score_lisibilite
 from engine.types import Candidat
 
-SEUIL_DETECTION = 0.5
+SEUIL_DETECTION = 0.2
 SEUIL_LISIBLE = 0.8
 MAX_BRANCHES = 3
 
@@ -1257,6 +1257,12 @@ export default defineConfig({
   <head>
     <meta charset="UTF-8" />
     <title>RRF OG LOCK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>
@@ -1264,6 +1270,8 @@ export default defineConfig({
   </body>
 </html>
 ```
+
+Note : `frontend/public/fond-boondocks.png` existe déjà dans le dépôt (image de fond fournie par l'utilisateur, déjà commitée) — ne pas la recréer, `App.css` s'appuie dessus au Step 7.
 
 - [ ] **Step 4: Écrire `frontend/src/api.js`**
 
@@ -1410,24 +1418,41 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 - [ ] **Step 7: Écrire `frontend/src/App.css`**
 
+Thème repris de l'image `frontend/public/fond-boondocks.png` (déjà présente dans le dépôt) : fond sombre, accent cyan façon cadenas holographique, titres en Bebas Neue majuscules avec letter-spacing (police d'affiche façon Boondocks).
+
 ```css
 body {
   margin: 0;
   font-family: sans-serif;
-  background: #1a1a1a;
-  color: #f5f5f5;
+  background: #0a0e12 url("/fond-boondocks.png") no-repeat center top;
+  background-size: cover;
+  color: #e6f1f5;
+  min-height: 100vh;
 }
 
 .app {
   max-width: 700px;
   margin: 40px auto;
-  padding: 0 20px;
+  padding: 24px 20px;
+  background: rgba(10, 14, 18, 0.85);
+  border-radius: 8px;
+  border: 1px solid #2a3a42;
+}
+
+h1, h2 {
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #7dd3fc;
 }
 
 textarea {
   width: 100%;
   height: 100px;
   font-family: monospace;
+  background: #12181c;
+  color: #e6f1f5;
+  border: 1px solid #2a3a42;
 }
 
 .boutons {
@@ -1436,28 +1461,43 @@ textarea {
 
 .boutons button {
   margin-right: 8px;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: #0f2a33;
+  color: #7dd3fc;
+  border: 1px solid #7dd3fc;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.boutons button:hover {
+  background: #7dd3fc;
+  color: #0a0e12;
 }
 
 .resultat ul {
   list-style: none;
   padding-left: 20px;
-  border-left: 2px solid #555;
+  border-left: 2px solid #2a3a42;
 }
 
 .decodeur {
   font-weight: bold;
   margin-right: 8px;
+  color: #7dd3fc;
 }
 
 .score {
-  color: #999;
+  color: #8fa3ab;
   font-size: 0.85em;
 }
 
 pre {
   white-space: pre-wrap;
   word-break: break-all;
-  background: #262626;
+  background: #12181c;
+  border: 1px solid #2a3a42;
   padding: 6px;
   border-radius: 4px;
 }
