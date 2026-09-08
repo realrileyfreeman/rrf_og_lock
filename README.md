@@ -1,7 +1,7 @@
 # RRF OG LOCK
 
 Outil de décodage automatique et récursif multicouche, réalisé dans le cadre
-d'un projet de master.
+éducatif.
 
 Étant donné une chaîne de texte, l'outil détecte quel encodage a été utilisé
 (base64, hex, ROT13, morse, binaire, URL encoding, entités HTML, échappement
