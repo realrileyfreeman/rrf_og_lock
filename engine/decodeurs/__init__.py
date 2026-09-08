@@ -1,0 +1,31 @@
+from . import (
+    base64_dec,
+    base32_dec,
+    hex_dec,
+    url_dec,
+    rot_dec,
+    binaire_dec,
+    morse_dec,
+    html_dec,
+    unicode_dec,
+    jwt_dec,
+    gzip_dec,
+    xor_dec,
+    hash_dec,
+)
+
+TOUS = [
+    ("base64", base64_dec),
+    ("base32", base32_dec),
+    ("hex", hex_dec),
+    ("url", url_dec),
+    ("rot13_cesar", rot_dec),
+    ("binaire", binaire_dec),
+    ("morse", morse_dec),
+    ("html", html_dec),
+    ("unicode", unicode_dec),
+    ("jwt", jwt_dec),
+    ("gzip", gzip_dec),
+    ("xor", xor_dec),
+    ("hash", hash_dec),
+]
